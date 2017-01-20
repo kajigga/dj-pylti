@@ -1,0 +1,7 @@
+{% extends 'layout.html' %}
+
+{% block main_content %}
+{% for k,v in post.items %}
+{{ k }} - {{ v }}<br/>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cartridge_basiclti_link xmlns="http://www.imsglobal.org/xsd/imslticc_v1p0"
+    xmlns:blti = "http://www.imsglobal.org/xsd/imsbasiclti_v1p0"
+    xmlns:lticm ="http://www.imsglobal.org/xsd/imslticm_v1p0"
+    xmlns:lticp ="http://www.imsglobal.org/xsd/imslticp_v1p0"
+    xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation = "http://www.imsglobal.org/xsd/imslticc_v1p0 http://www.imsglobal.org/xsd/lti/ltiv1p0/imslticc_v1p0.xsd
+    http://www.imsglobal.org/xsd/imsbasiclti_v1p0 http://www.imsglobal.org/xsd/lti/ltiv1p0/imsbasiclti_v1p0.xsd
+    http://www.imsglobal.org/xsd/imslticm_v1p0 http://www.imsglobal.org/xsd/lti/ltiv1p0/imslticm_v1p0.xsd
+    http://www.imsglobal.org/xsd/imslticp_v1p0 http://www.imsglobal.org/xsd/lti/ltiv1p0/imslticp_v1p0.xsd">
+    <blti:launch_url>https://{{request.get_host}}{{ object.build_launch_url }}</blti:launch_url>
+    <blti:title>{{ object.title }}</blti:title>
+    <blti:description>{{ object.description }}</blti:description>
+    <blti:extensions platform="canvas.instructure.com">
+      <lticm:property name="privacy_level">{{ object.properties_privacy_level }}</lticm:property>
+      <lticm:property name="domain">{{ object.properties_domain }}</lticm:property>
+      <lticm:property name="text">{{ object.properties_text }}</lticm:property>
+      {% for option in object.options.all %}
+        <lticm:options name="{{ option.name }}">
+          {% for prop in option.properties.all %}
+          <lticm:property name="{{prop.option.name}}">{{prop.value}}</lticm:property>
+          {% endfor %}
+          {% for option2 in option.children.all %}
+          <lticm:options name="{{ option2.name }}">
+            {% for prop2 in option2.properties.all %}
+            <lticm:property name="{{prop2.option.name}}">{{prop2.value}}</lticm:property>
+            {% endfor %}
+          </lticm:options>
+          {% endfor %}
+        </lticm:options>
+      {% endfor %}
+    </blti:extensions>
+</cartridge_basiclti_link>
